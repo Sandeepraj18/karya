@@ -15,9 +15,17 @@ workflows:
       - name: Install npm dependencies
         script: |
           npm install
+      - name: Install Capacitor CLI
+        script: |
+          npm install -g @capacitor/cli
       - name: Build web app
         script: |
           npm run build
+      - name: Check if android directory exists
+        script: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
       - name: Sync with Capacitor
         script: |
           npx cap sync android
