@@ -1,6 +1,5 @@
 
 import { Task } from "@/types/task";
-import { useToast } from "@/hooks/use-toast";
 
 // This is a mock database using localStorage
 // In a real app, you'd use SQLite, Hive, or another local database
@@ -114,56 +113,18 @@ export const processRecurringTasks = (): void => {
   }
 };
 
-// Custom hook to manage tasks with toast notifications
+// Custom hook to manage tasks without toast notifications
 export const useTaskManager = () => {
-  const { toast } = useToast();
-  
   return {
     getTasks,
     addTask: (task: Omit<Task, "id" | "createdAt">) => {
-      const newTask = addTask(task);
-      if (newTask) {
-        toast({
-          title: "Task added",
-          description: task.title
-        });
-        return newTask;
-      }
-      toast({
-        title: "Failed to add task",
-        variant: "destructive"
-      });
-      return null;
+      return addTask(task);
     },
     deleteTask: (id: string, title: string) => {
-      const success = deleteTask(id);
-      if (success) {
-        toast({
-          title: "Task deleted",
-          description: title
-        });
-        return true;
-      }
-      toast({
-        title: "Failed to delete task",
-        variant: "destructive"
-      });
-      return false;
+      return deleteTask(id);
     },
     toggleTaskCompletion: (id: string, title: string, currentStatus: boolean) => {
-      const updatedTask = toggleTaskCompletion(id);
-      if (updatedTask) {
-        toast({
-          title: updatedTask.isCompleted ? "Task completed" : "Task reopened",
-          description: title
-        });
-        return updatedTask;
-      }
-      toast({
-        title: "Failed to update task",
-        variant: "destructive"
-      });
-      return null;
+      return toggleTaskCompletion(id);
     },
     processRecurringTasks
   };
