@@ -54,24 +54,37 @@ const TaskCard = ({ task, onToggleComplete, onDelete }: TaskCardProps) => {
     touchEndX.current = null;
   };
   
-  // Format time from HH:MM to 12-hour format
+  // Format time from HH:MM to standard format
   const formatTime = (time: string) => {
     try {
-      const [hours, minutes] = time.split(":");
-      const hour = parseInt(hours);
-      const period = hour >= 12 ? "PM" : "AM";
-      const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-      return `${formattedHour}:${minutes} ${period}`;
+      return time;
     } catch (error) {
       return time;
     }
   };
   
+  // Format location or description shown under task
+  const renderSubtext = () => {
+    if (task.time) {
+      return (
+        <div className="flex items-center text-sm text-gray-400">
+          {task.time}
+        </div>
+      );
+    } else if (task.isRecurring) {
+      return (
+        <div className="flex items-center text-sm text-gray-400">
+          Today
+        </div>
+      );
+    }
+    return null;
+  };
+  
   return (
     <div
       className={cn(
-        "task-card",
-        task.isPriority && "priority",
+        "task-card rounded-2xl mb-3",
         task.isCompleted && "completed"
       )}
       onTouchStart={handleTouchStart}
@@ -79,11 +92,11 @@ const TaskCard = ({ task, onToggleComplete, onDelete }: TaskCardProps) => {
       onTouchEnd={handleTouchEnd}
       onClick={() => onToggleComplete(task.id)}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <div 
           className={cn(
-            "w-6 h-6 rounded-full border-2 border-karya-gold flex items-center justify-center",
-            task.isCompleted ? "bg-karya-gold" : "bg-transparent"
+            "w-7 h-7 rounded-full border-2 border-gray-500 flex items-center justify-center",
+            task.isCompleted ? "bg-gray-500" : "bg-transparent"
           )}
         >
           {task.isCompleted && <Check size={16} className="text-black" />}
@@ -91,26 +104,19 @@ const TaskCard = ({ task, onToggleComplete, onDelete }: TaskCardProps) => {
         
         <div className="flex flex-col">
           <h3 className={cn(
-            "font-medium text-base",
+            "font-normal text-xl",
             task.isCompleted && "line-through opacity-70"
           )}>
             {task.title}
           </h3>
           
-          {task.time && (
-            <div className="flex items-center text-xs text-gray-400 mt-1">
-              <Clock size={12} className="mr-1" />
-              {formatTime(task.time)}
-              {task.isRecurring && <span className="ml-2">• Daily</span>}
-            </div>
-          )}
+          {renderSubtext()}
         </div>
       </div>
       
       {task.isPriority && (
         <Star 
-          size={18} 
-          fill="#D4AF37" 
+          size={22} 
           className="text-karya-gold" 
           onClick={(e) => e.stopPropagation()}
         />

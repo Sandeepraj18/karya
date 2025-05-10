@@ -52,13 +52,13 @@
   }
 
   body {
-    @apply bg-karya-dark text-foreground;
+    @apply bg-black text-foreground;
   }
 }
 
 /* Custom styles */
 .task-card {
-  @apply relative flex items-center justify-between gap-2 p-4 rounded-lg bg-karya-dark-card border border-karya-dark-input transition-all duration-200;
+  @apply relative flex items-center justify-between gap-2 p-4 bg-karya-dark-card border-none transition-all duration-200;
 }
 
 .task-card.priority {

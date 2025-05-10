@@ -18,10 +18,10 @@ const TaskSection = ({
   onDelete 
 }: TaskSectionProps) => {
   return (
-    <section className="mb-6">
-      <h2 className="text-lg font-medium mb-3 text-karya-gold">{title}</h2>
+    <section className="mb-8">
+      <h2 className="text-lg font-normal uppercase tracking-wider mb-4 text-gray-500">{title}</h2>
       
-      <div className="space-y-3">
+      <div>
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskCard 
