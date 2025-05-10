@@ -5,12 +5,10 @@ import { useTaskManager, processRecurringTasks } from "@/utils/storage";
 import AppHeader from "@/components/AppHeader";
 import TaskSection from "@/components/TaskSection";
 import AddTaskDialog from "@/components/AddTaskDialog";
-import BottomNavigation from "@/components/BottomNavigation";
 
 const Index = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"home" | "completed">("home");
   
   const { 
     getTasks, 
@@ -38,10 +36,6 @@ const Index = () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-  
-  // Filter tasks based on active tab and completion status
-  const activeTasks = tasks.filter(task => !task.isCompleted);
-  const completedTasks = tasks.filter(task => task.isCompleted);
   
   // Handle adding a new task
   const handleAddTask = (newTask: Omit<Task, "id" | "createdAt">) => {
@@ -77,37 +71,22 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-karya-dark text-white flex flex-col">
-      <div className="container max-w-md mx-auto px-4 flex-1 pb-20">
+      <div className="container max-w-md mx-auto px-4 flex-1">
         <AppHeader onAddTaskClick={() => setIsAddDialogOpen(true)} />
         
-        {activeTab === "home" ? (
-          <TaskSection
-            title="Today"
-            tasks={activeTasks}
-            emptyMessage="No tasks for today. Add one to get started!"
-            onToggleComplete={handleToggleComplete}
-            onDelete={handleDeleteTask}
-          />
-        ) : (
-          <TaskSection
-            title="Completed"
-            tasks={completedTasks}
-            emptyMessage="No completed tasks yet."
-            onToggleComplete={handleToggleComplete}
-            onDelete={handleDeleteTask}
-          />
-        )}
+        <TaskSection
+          title="Tasks"
+          tasks={tasks}
+          emptyMessage="No tasks. Add one to get started!"
+          onToggleComplete={handleToggleComplete}
+          onDelete={handleDeleteTask}
+        />
       </div>
       
       <AddTaskDialog
         isOpen={isAddDialogOpen}
         onClose={() => setIsAddDialogOpen(false)}
         onAddTask={handleAddTask}
-      />
-      
-      <BottomNavigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
       />
     </div>
   );

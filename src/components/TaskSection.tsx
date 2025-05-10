@@ -17,13 +17,23 @@ const TaskSection = ({
   onToggleComplete, 
   onDelete 
 }: TaskSectionProps) => {
+  // Sort tasks to show active tasks first, then completed tasks
+  const sortedTasks = [...tasks].sort((a, b) => {
+    // First sort by completion status (active tasks first)
+    if (a.isCompleted !== b.isCompleted) {
+      return a.isCompleted ? 1 : -1;
+    }
+    // Then sort by creation date (newest first)
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return (
     <section className="mb-8">
       <h2 className="text-lg font-normal uppercase tracking-wider mb-4 text-gray-500">{title}</h2>
       
       <div>
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
+        {sortedTasks.length > 0 ? (
+          sortedTasks.map((task) => (
             <TaskCard 
               key={task.id} 
               task={task} 
